@@ -1,0 +1,6 @@
+python-dotenv
+transformers
+gTTS
+streamlit
+google-generativeai
+torch
