@@ -3,4 +3,3 @@ transformers
 gTTS
 streamlit
 google-generativeai
-torch

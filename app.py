@@ -4,22 +4,36 @@ from transformers import pipeline
 from gtts import gTTS
 import google.generativeai as genai
 import streamlit as st
+from PIL import Image  # Add this import statement
 
 # Load environment variables
 load_dotenv(find_dotenv())
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
 
-# Image to text
-def img2text(file_path):
-    image_to_text = pipeline("image-to-text", model="Salesforce/blip-image-captioning-base")
-    text = image_to_text(file_path)[0]["generated_text"]
-    return text
+# Image to text using Google Gemini API
+def img2text(uploaded_file):
+    if uploaded_file is not None:
+        bytes_data = uploaded_file.getvalue()
+        image_parts = [
+            {
+                "mime_type": uploaded_file.type,
+                "data": bytes_data
+            }
+        ]
+        
+        input_prompt = "Describe the content of the image in detail."
+        model = genai.GenerativeModel('gemini-pro-vision')
+        response = model.generate_content([input_prompt, image_parts[0]])
+        text = response.text
+        return text
+    else:
+        raise FileNotFoundError("No file uploaded")
 
 # Generate story
 def generate_story(scenario):
     input_prompt = f'''
-    You are a story teller;
+    You are a storyteller;
     You can generate a short story based on a simple narrative, the story should be no more than 50 words;
     CONTEXT: {scenario}
     STORY: 
@@ -41,17 +55,14 @@ def main():
 
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png", "gif", "bmp", "tiff", "tif", "webp"])
     if uploaded_file is not None:
-        # Save the uploaded file to disk
-        bytes_data = uploaded_file.getvalue()
-        with open(uploaded_file.name, "wb") as file:
-            file.write(bytes_data)
-        
         # Display the uploaded image
-        st.image(uploaded_file, caption="Uploaded Image", use_column_width=True)
+        image = Image.open(uploaded_file)
+        st.image(image, caption="Uploaded Image.", use_column_width=True)
 
-        if st.button("Generate Story"):
+    if st.button("Generate Story"):
+        if uploaded_file is not None:
             # Convert image to text
-            scenario = img2text(uploaded_file.name)
+            scenario = img2text(uploaded_file)
             st.write(f"Extracted Text: {scenario}")
 
             # Generate story
@@ -62,6 +73,8 @@ def main():
             audio_file = text2speech(story)
             audio_bytes = open(audio_file, "rb").read()
             st.audio(audio_bytes, format="audio/mp3")
+        else:
+            st.error("Please upload an image first")
 
 if __name__ == '__main__':
     main()
