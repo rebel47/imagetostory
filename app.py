@@ -52,6 +52,7 @@ def text2speech(text):
 # Streamlit app
 def main():
     st.title("AI Story Generator from Image")
+    st.text("       - Developed By: Mohammad Ayaz Alam")
 
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png", "gif", "bmp", "tiff", "tif", "webp"])
     if uploaded_file is not None:
