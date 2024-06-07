@@ -34,7 +34,7 @@ def img2text(uploaded_file):
 def generate_story(scenario):
     input_prompt = f'''
     You are a storyteller;
-    You can generate a short story based on a simple narrative, the story should be no more than 50 words;
+    You can generate a short story based on a the given narrative, try to be more realistics and the story should be no more than 100 words;
     CONTEXT: {scenario}
     STORY: 
     '''
