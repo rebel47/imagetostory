@@ -22,7 +22,7 @@ def img2text(uploaded_file):
             }
         ]
         
-        input_prompt = "Describe the content of the image in detail."
+        input_prompt = "Describe the content of the image in very detail and concise way not more than 100 words"
         model = genai.GenerativeModel('gemini-1.5-flash')
         response = model.generate_content([input_prompt, image_parts[0]])
         text = response.text
@@ -34,7 +34,7 @@ def img2text(uploaded_file):
 def generate_story(scenario):
     input_prompt = f'''
     You are a storyteller;
-    You can generate a short story based on a the given narrative, try to be more realistics and the story should be no more than 100 words;
+    You can generate a short story based on a the given narrative, try to be more realistics and the story should be no more than 300 words;
     CONTEXT: {scenario}
     STORY: 
     '''
@@ -64,11 +64,11 @@ def main():
         if uploaded_file is not None:
             # Convert image to text
             scenario = img2text(uploaded_file)
-            st.write(f"Extracted Text: {scenario}")
+            st.write(f"**Extracted Text:** {scenario}")
 
             # Generate story
             story = generate_story(scenario)
-            st.write(f"Generated Story: {story}")
+            st.write(f"**Generated Story:** {story}")
 
             # Convert story to speech
             audio_file = text2speech(story)
