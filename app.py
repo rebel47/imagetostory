@@ -38,7 +38,7 @@ def generate_story(scenario):
     CONTEXT: {scenario}
     STORY: 
     '''
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-1.5-flash')
     response = model.generate_content(input_prompt)
     return response.text
 
@@ -58,7 +58,7 @@ def main():
     if uploaded_file is not None:
         # Display the uploaded image
         image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image.", use_column_width=True)
+        st.image(image, caption="Uploaded Image.", use_container_width =True)
 
     if st.button("Generate Story"):
         if uploaded_file is not None:
