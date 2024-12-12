@@ -23,7 +23,7 @@ def img2text(uploaded_file):
         ]
         
         input_prompt = "Describe the content of the image in detail."
-        model = genai.GenerativeModel('gemini-pro-vision')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         response = model.generate_content([input_prompt, image_parts[0]])
         text = response.text
         return text
