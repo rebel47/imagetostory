@@ -23,7 +23,7 @@ def img2text(uploaded_file):
         ]
         
         input_prompt = "Describe the content of the image in very detail and concise way not more than 100 words"
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-2.0-flash')
         response = model.generate_content([input_prompt, image_parts[0]])
         text = response.text
         return text
